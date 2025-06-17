@@ -33,17 +33,13 @@ RUN mkdir -p /home/app/.cache/huggingface \
 # Copy only requirements first for better caching
 COPY --chown=app:app requirements.txt .
 
-# Install Python dependencies (this layer will be cached)
+# Install Python dependencies (this layer will be cached as long as requirements.txt doesn't change)
 RUN pip install --user --cache-dir=/home/app/.cache/pip -r requirements.txt
 
-# Copy git configuration files
-COPY --chown=app:app .gitmodules .
-COPY --chown=app:app .git .git
+# Clone Voice_Extractor dependency (cached as long as this RUN instruction doesn't change)
+RUN git clone --depth 1 https://github.com/ReisCook/Voice_Extractor.git extern/Voice_Extractor
 
-# Initialize git submodules to get Voice_Extractor
-RUN git submodule update --init --recursive
-
-# Copy the rest of the application code
+# Copy application source code (this will only invalidate if your source code changes)
 COPY --chown=app:app setup.py pyproject.toml ./
 COPY --chown=app:app src/ src/
 COPY --chown=app:app main.py example.py ./

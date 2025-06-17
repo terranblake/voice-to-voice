@@ -1,9 +1,7 @@
-# Version control
+# Version control - exclude everything git-related for better caching
 .git
-!.git/HEAD
-!.git/config
-!.git/refs
-!.gitmodules
+.gitmodules
+.gitignore
 
 # Python
 __pycache__/
