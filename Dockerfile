@@ -1,5 +1,5 @@
 # Use Python 3.10 as base image
-FROM python:3.10-slim
+FROM python:3.10-slim-bullseye
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     build-essential \
+    && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
