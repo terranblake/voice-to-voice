@@ -280,7 +280,13 @@ pytest tests/ -v --cov=src/voice_pipeline
    - Ensure HF_TOKEN is set in .env
    - Check token permissions on Hugging Face
 
-4. **Voice_Extractor issues**:
+4. **Numpy compatibility errors** (e.g., "cannot import name 'broadcast_to'"):
+   - This is fixed in the current version with pinned numpy<2.0.0
+   - If you encounter this, ensure you're using the latest requirements.txt
+   - For manual installs: `pip install "numpy>=1.24.0,<2.0.0"`
+   - The Docker build handles this automatically
+
+5. **Voice_Extractor issues**:
    - Ensure git is installed
    - Check network connectivity
    - Try reinstalling the dependency
