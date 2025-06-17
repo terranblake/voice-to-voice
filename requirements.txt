@@ -6,7 +6,6 @@ soundfile>=0.12.1
 pandas>=2.0.0
 
 # PyTorch with CUDA support (matching Voice_Extractor requirements)
---extra-index-url https://download.pytorch.org/whl/cu121
 torch>=2.7.0
 torchvision>=0.22.0
 torchaudio>=2.7.0

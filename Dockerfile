@@ -33,7 +33,10 @@ RUN mkdir -p /home/app/.cache/huggingface \
 # Copy only requirements first for better caching
 COPY --chown=app:app requirements.txt .
 
-# Install Python dependencies (this layer will be cached as long as requirements.txt doesn't change)
+# Install PyTorch with CUDA support first (separate from requirements.txt)
+RUN pip install --user --cache-dir=/home/app/.cache/pip --extra-index-url https://download.pytorch.org/whl/cu121 torch>=2.7.0 torchvision>=0.22.0 torchaudio>=2.7.0
+
+# Install remaining Python dependencies (this layer will be cached as long as requirements.txt doesn't change)
 RUN pip install --user --cache-dir=/home/app/.cache/pip -r requirements.txt
 
 # Clone Voice_Extractor dependency (cached as long as this RUN instruction doesn't change)
