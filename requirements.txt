@@ -4,7 +4,13 @@ ffmpeg-python>=0.2.0
 datasets>=2.14.0
 soundfile>=0.12.1
 pandas>=2.0.0
-torch>=2.0.0
+
+# PyTorch with CUDA support (matching Voice_Extractor requirements)
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch>=2.7.0
+torchvision>=0.22.0
+torchaudio>=2.7.0
+
 transformers>=4.35.0
 accelerate>=0.20.0
 peft>=0.6.0
@@ -20,6 +26,16 @@ silero-vad>=5.1.2
 pytorch-lightning
 scipy
 librosa>=0.9.0
+rich
+tqdm
+matplotlib
+hydra-core
+pyyaml
+onnx
+onnxruntime
+
+# Compatible numpy version (pinned to avoid conflicts)
+numpy>=1.24.0,<2.0.0
 
 # Unsloth for efficient training
 unsloth[tts] @ git+https://github.com/unslothai/unsloth.git

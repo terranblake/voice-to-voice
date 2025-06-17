@@ -39,6 +39,10 @@ RUN pip install --user --cache-dir=/home/app/.cache/pip -r requirements.txt
 # Clone Voice_Extractor dependency (cached as long as this RUN instruction doesn't change)
 RUN git clone --depth 1 https://github.com/ReisCook/Voice_Extractor.git extern/Voice_Extractor
 
+# Install Voice_Extractor dependencies (avoiding conflicts by using --no-deps for conflicting packages)
+RUN pip install --user --cache-dir=/home/app/.cache/pip -r extern/Voice_Extractor/requirements.txt --no-deps || true && \
+    pip install --user --cache-dir=/home/app/.cache/pip wespeaker@git+https://github.com/wenet-e2e/wespeaker.git
+
 # Copy application source code (this will only invalidate if your source code changes)
 COPY --chown=app:app setup.py pyproject.toml ./
 COPY --chown=app:app src/ src/
