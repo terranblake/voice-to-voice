@@ -1,0 +1,33 @@
+# Core dependencies
+yt-dlp>=2023.12.30
+ffmpeg-python>=0.2.0
+datasets>=2.14.0
+soundfile>=0.12.1
+pandas>=2.0.0
+torch>=2.0.0
+transformers>=4.35.0
+accelerate>=0.20.0
+peft>=0.6.0
+
+# Voice processing
+voice-extractor @ git+https://github.com/ReisCook/Voice_Extractor.git
+
+# Unsloth for efficient training
+unsloth[tts] @ git+https://github.com/unslothai/unsloth.git
+
+# Development dependencies
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+mypy>=1.5.0
+pre-commit>=3.4.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# CLI and utilities
+click>=8.1.0
+rich>=13.0.0
+tqdm>=4.65.0
