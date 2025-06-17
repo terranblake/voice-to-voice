@@ -10,8 +10,7 @@ accelerate>=0.20.0
 peft>=0.6.0
 
 # Voice processing
-spleeter>=2.3.0
-librosa>=0.9.0
+voice-extractor @ git+https://github.com/ReisCook/Voice_Extractor.git
 
 # Unsloth for efficient training
 unsloth[tts] @ git+https://github.com/unslothai/unsloth.git

@@ -172,7 +172,7 @@ demo_path = pipeline.generate_demo(lora_dir, "Custom text to synthesize")
 
 2. **Voice Extraction** (`extractor.py`):
    - Creates reference audio slice
-   - Uses Spleeter to isolate target speaker
+   - Uses Voice_Extractor to isolate target speaker
    - Produces segmented audio clips with transcriptions
 
 3. **Dataset Preparation** (`dataset.py`):
@@ -227,7 +227,7 @@ pytest tests/ -v --cov=src/voice_pipeline
 - datasets (HuggingFace datasets)
 - transformers (Model inference)
 - unsloth (Efficient training)
-- spleeter (Voice separation)
+- voice-extractor (Voice separation)
 
 ## 🚨 Troubleshooting
 
@@ -251,10 +251,10 @@ pytest tests/ -v --cov=src/voice_pipeline
    - Ensure HF_TOKEN is set in .env
    - Check token permissions on Hugging Face
 
-4. **Spleeter issues**:
+4. **Voice_Extractor issues**:
    - Ensure git is installed
    - Check network connectivity
-   - Try reinstalling: `pip install spleeter`
+   - Try reinstalling the dependency
 
 ## 📄 License
 
@@ -270,7 +270,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- [Spleeter](https://github.com/deezer/spleeter) for voice separation
+- [ReisCook/Voice_Extractor](https://github.com/ReisCook/Voice_Extractor) for voice separation
 - [Unsloth](https://github.com/unslothai/unsloth) for efficient model training
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) for YouTube audio downloading
 - Hugging Face ecosystem for model hosting and datasets
