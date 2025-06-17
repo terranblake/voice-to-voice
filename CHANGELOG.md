@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure with modular components
 - YouTube audio downloading with yt-dlp
-- Voice extraction using ReisCook/Voice_Extractor
+- Voice extraction using Spleeter
 - Dataset preparation and Hugging Face Hub integration
 - TTS model fine-tuning with Unsloth LoRA
 - Speech synthesis for demo generation

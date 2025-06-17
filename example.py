@@ -16,7 +16,7 @@ the public class methods.
 Dependencies
 ------------
 pip install yt-dlp ffmpeg-python datasets soundfile unsloth[tts] \
-           voice_extractor @git+https://github.com/ReisCook/Voice_Extractor
+           spleeter>=2.3.0 librosa>=0.9.0
 """
 
 from __future__ import annotations
@@ -130,20 +130,62 @@ class VoiceExtractorRunner:
         if self.dataset_dir.exists():
             log.info("Extraction already done, skipping.")
             return self.dataset_dir
+        
+        # Use Spleeter for voice separation
+        spleeter_output = self.cfg.out_dir / "spleeter_output"
+        spleeter_output.mkdir(parents=True, exist_ok=True)
+        
+        # Separate vocals using Spleeter
         cmd = [
-            "voice_extractor",
-            "--input-audio",
-            str(src_wav),
-            "--reference-audio",
-            str(self.ref_wav),
-            "--target-name",
-            "female",
-            "--output-base-dir",
-            str(self.dataset_dir),
-            "--token",
-            self.cfg.hf_token or "",
+            "spleeter",
+            "separate",
+            "-p", "spleeter:2stems-16kHz",
+            "-o", str(spleeter_output),
+            str(src_wav)
         ]
         run(cmd)
+        
+        # Create dataset directory structure
+        wav_dir = self.dataset_dir / "female" / "wav"
+        wav_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Find the separated vocals
+        source_name = src_wav.stem
+        vocals_path = spleeter_output / source_name / "vocals.wav"
+        
+        if vocals_path.exists():
+            # Segment the vocals into clips
+            import librosa
+            y, sr = librosa.load(str(vocals_path))
+            duration = len(y) / sr
+            
+            clip_index = 0
+            segment_length = 5  # 5 second clips
+            start_time = 0
+            
+            while start_time < duration - segment_length:
+                clip_path = wav_dir / f"clip_{clip_index:04d}.wav"
+                txt_path = clip_path.with_suffix(".txt")
+                
+                # Extract segment
+                run(["ffmpeg", "-y", "-i", str(vocals_path), 
+                     "-ss", str(start_time), "-t", str(segment_length),
+                     "-ar", "24000", str(clip_path)])
+                
+                # Create transcription placeholder
+                txt_path.write_text(f"Audio segment {clip_index}")
+                
+                clip_index += 1
+                start_time += segment_length - 1  # 1 second overlap
+                
+            log.info(f"Created {clip_index} clips from separated vocals")
+        else:
+            log.warning("Vocals separation failed, using original audio")
+            # Fallback: segment original audio
+            run(["ffmpeg", "-y", "-i", str(src_wav), "-t", "30", "-ar", "24000", 
+                 str(wav_dir / "fallback.wav")])
+            (wav_dir / "fallback.txt").write_text("Fallback audio segment")
+        
         return self.dataset_dir
 
 

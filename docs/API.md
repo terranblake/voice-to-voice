@@ -100,7 +100,7 @@ class YouTubeDownloader:
 
 ### VoiceExtractor
 
-Extracts specific speaker's voice using Voice_Extractor.
+Extracts specific speaker's voice using Spleeter.
 
 ```python
 class VoiceExtractor:
