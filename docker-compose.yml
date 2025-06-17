@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  voice-clone:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: voice_cloning_pipeline
+    volumes:
+      # Mount output directory to persist results
+      - ./voice_clone:/home/app/voice_clone
+      # Mount .env file for configuration
+      - ./.env:/home/app/.env:ro
+    environment:
+      # Override any environment variables if needed
+      - PYTHONPATH=/home/app/src
+    command: >
+      sh -c "echo 'Voice Cloning Pipeline Container Ready!' &&
+             echo 'Usage: docker-compose run voice-clone <youtube_url>' &&
+             echo 'Example: docker-compose run voice-clone https://www.youtube.com/watch?v=example' &&
+             tail -f /dev/null"
+    
+  # Optional: GPU-enabled version (requires nvidia-docker)
+  voice-clone-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    container_name: voice_cloning_pipeline_gpu
+    runtime: nvidia
+    volumes:
+      - ./voice_clone:/home/app/voice_clone
+      - ./.env:/home/app/.env:ro
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - PYTHONPATH=/home/app/src
+    profiles:
+      - gpu
