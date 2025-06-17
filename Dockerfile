@@ -20,15 +20,33 @@ RUN useradd --create-home --shell /bin/bash app
 USER app
 WORKDIR /home/app
 
-# Copy requirements and install Python dependencies
-COPY --chown=app:app requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+# Set up model cache directories as volumes
+ENV HF_HOME=/home/app/.cache/huggingface \
+    TORCH_HOME=/home/app/.cache/torch \
+    XDG_CACHE_HOME=/home/app/.cache
 
-# Copy application code (this will include .gitmodules)
-COPY --chown=app:app . .
+# Create cache directories
+RUN mkdir -p /home/app/.cache/huggingface \
+             /home/app/.cache/torch \
+             /home/app/.cache/pip
+
+# Copy only requirements first for better caching
+COPY --chown=app:app requirements.txt .
+
+# Install Python dependencies (this layer will be cached)
+RUN pip install --user --cache-dir=/home/app/.cache/pip -r requirements.txt
+
+# Copy git configuration files
+COPY --chown=app:app .gitmodules .
+COPY --chown=app:app .git .git
 
 # Initialize git submodules to get Voice_Extractor
 RUN git submodule update --init --recursive
+
+# Copy the rest of the application code
+COPY --chown=app:app setup.py pyproject.toml ./
+COPY --chown=app:app src/ src/
+COPY --chown=app:app main.py example.py ./
 
 # Install the package
 RUN pip install --user -e .

@@ -11,9 +11,16 @@ services:
       - ./voice_clone:/home/app/voice_clone
       # Mount .env file for configuration
       - ./.env:/home/app/.env:ro
+      # Mount cache directories to avoid redownloading models
+      - huggingface_cache:/home/app/.cache/huggingface
+      - torch_cache:/home/app/.cache/torch
+      - pip_cache:/home/app/.cache/pip
     environment:
       # Override any environment variables if needed
       - PYTHONPATH=/home/app/src
+      - HF_HOME=/home/app/.cache/huggingface
+      - TORCH_HOME=/home/app/.cache/torch
+      - XDG_CACHE_HOME=/home/app/.cache
     command: >
       sh -c "echo 'Voice Cloning Pipeline Container Ready!' &&
              echo 'Usage: docker-compose run voice-clone <youtube_url>' &&
@@ -30,8 +37,24 @@ services:
     volumes:
       - ./voice_clone:/home/app/voice_clone
       - ./.env:/home/app/.env:ro
+      # Share the same cache volumes for consistency
+      - huggingface_cache:/home/app/.cache/huggingface
+      - torch_cache:/home/app/.cache/torch
+      - pip_cache:/home/app/.cache/pip
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - PYTHONPATH=/home/app/src
+      - HF_HOME=/home/app/.cache/huggingface
+      - TORCH_HOME=/home/app/.cache/torch
+      - XDG_CACHE_HOME=/home/app/.cache
     profiles:
       - gpu
+
+# Named volumes for persistent caching
+volumes:
+  huggingface_cache:
+    driver: local
+  torch_cache:
+    driver: local
+  pip_cache:
+    driver: local

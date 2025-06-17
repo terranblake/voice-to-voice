@@ -128,7 +128,7 @@ DEFAULT_REF_END=15
 ### Build and run with Docker Compose:
 
 ```bash
-# Build the container
+# Build the container (with optimized caching)
 docker-compose build
 
 # Run the pipeline
@@ -136,6 +136,28 @@ docker-compose run voice-clone "https://www.youtube.com/watch?v=example"
 
 # For GPU support (requires nvidia-docker)
 docker-compose --profile gpu run voice-clone-gpu "https://www.youtube.com/watch?v=example"
+```
+
+### Docker Caching and Volumes:
+
+The Docker setup includes persistent volumes for:
+- **HuggingFace models**: Cached in `huggingface_cache` volume
+- **PyTorch models**: Cached in `torch_cache` volume  
+- **Pip packages**: Cached in `pip_cache` volume
+- **Output files**: Mounted to `./voice_clone` directory
+
+This prevents redownloading models and dependencies on subsequent runs.
+
+### Clean up volumes (if needed):
+
+```bash
+# Remove all project volumes
+docker-compose down -v
+
+# Remove specific volumes
+docker volume rm voice-to-voice_huggingface_cache
+docker volume rm voice-to-voice_torch_cache
+docker volume rm voice-to-voice_pip_cache
 ```
 
 ### Direct Docker usage:
