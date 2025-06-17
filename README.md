@@ -1,3 +1,5 @@
+**⚠️ Important**: This tool is for educational and research purposes. Ensure you have permission to use any audio content and respect copyright laws and terms of service.
+
 # Voice Cloning Pipeline
 
 A comprehensive, end-to-end voice cloning pipeline that can extract a speaker's voice from YouTube videos and create a fine-tuned Text-to-Speech (TTS) model capable of generating speech in that voice.
