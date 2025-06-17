@@ -10,7 +10,7 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from voice_pipeline import VoiceCloningPipeline, PipelineConfig
+from src.voice_pipeline import VoiceCloningPipeline, PipelineConfig
 
 
 def main():

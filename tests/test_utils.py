@@ -7,7 +7,7 @@ import subprocess
 from unittest.mock import patch, MagicMock
 import pytest
 
-from voice_pipeline.utils import setup_logging, run_command
+from src.voice_pipeline.utils import setup_logging, run_command
 
 
 class TestSetupLogging:
