@@ -26,10 +26,17 @@ A comprehensive, end-to-end voice cloning pipeline that can extract a speaker's 
 
 ### Installation
 
-1. **Clone the repository**:
+1. **Clone the repository with submodules**:
+   ```bash
+   git clone --recursive <your-repo-url>
+   cd voice-to-voice
+   ```
+   
+   Or if you already cloned without `--recursive`:
    ```bash
    git clone <your-repo-url>
    cd voice-to-voice
+   git submodule update --init --recursive
    ```
 
 2. **Run the setup script**:

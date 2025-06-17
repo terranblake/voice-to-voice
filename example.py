@@ -130,8 +130,16 @@ class VoiceExtractorRunner:
         if self.dataset_dir.exists():
             log.info("Extraction already done, skipping.")
             return self.dataset_dir
+            
+        # Find the Voice_Extractor script in the submodule
+        voice_extractor_path = Path("extern") / "Voice_Extractor" / "run_extractor.py"
+        if not voice_extractor_path.exists():
+            log.error("Voice_Extractor submodule not found. Please run 'git submodule update --init --recursive'")
+            sys.exit(1)
+            
         cmd = [
-            "voice_extractor",
+            "python",
+            str(voice_extractor_path),
             "--input-audio",
             str(src_wav),
             "--reference-audio",

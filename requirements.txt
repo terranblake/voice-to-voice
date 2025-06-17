@@ -10,7 +10,16 @@ accelerate>=0.20.0
 peft>=0.6.0
 
 # Voice processing
-voice-extractor @ git+https://github.com/ReisCook/Voice_Extractor.git
+# Note: Voice_Extractor is cloned and used as a script (see setup.sh)
+# Voice_Extractor dependencies:
+pyannote.audio>=3.3.2
+openai-whisper>=20240930
+speechbrain>=1.0.0
+torchcrepe>=0.0.21
+silero-vad>=5.1.2
+pytorch-lightning
+scipy
+librosa>=0.9.0
 
 # Unsloth for efficient training
 unsloth[tts] @ git+https://github.com/unslothai/unsloth.git

@@ -1,0 +1,3 @@
+[submodule "extern/Voice_Extractor"]
+	path = extern/Voice_Extractor
+	url = https://github.com/ReisCook/Voice_Extractor.git

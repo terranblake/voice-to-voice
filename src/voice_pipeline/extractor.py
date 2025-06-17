@@ -65,8 +65,21 @@ class VoiceExtractor:
 
         self.logger.info("Starting voice extraction process")
         
+        # Find the Voice_Extractor script in the submodule
+        voice_extractor_path = Path(__file__).parent.parent.parent / "extern" / "Voice_Extractor" / "run_extractor.py"
+        if not voice_extractor_path.exists():
+            # Try relative to current working directory
+            voice_extractor_path = Path.cwd() / "extern" / "Voice_Extractor" / "run_extractor.py"
+            
+        if not voice_extractor_path.exists():
+            raise FileNotFoundError(
+                "Voice_Extractor submodule not found. Please run 'git submodule update --init --recursive' "
+                "to initialize the submodule."
+            )
+        
         cmd = [
-            "voice_extractor",
+            "python",
+            str(voice_extractor_path),
             "--input-audio",
             str(source_wav),
             "--reference-audio",

@@ -24,8 +24,11 @@ WORKDIR /home/app
 COPY --chown=app:app requirements.txt .
 RUN pip install --user --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code (this will include .gitmodules)
 COPY --chown=app:app . .
+
+# Initialize git submodules to get Voice_Extractor
+RUN git submodule update --init --recursive
 
 # Install the package
 RUN pip install --user -e .

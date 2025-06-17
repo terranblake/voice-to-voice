@@ -36,6 +36,11 @@ pip install -e .
 echo "🔧 Installing development dependencies..."
 pip install -e ".[dev]"
 
+# Initialize git submodules (including Voice_Extractor)
+echo "🔄 Initializing git submodules..."
+git submodule update --init --recursive
+echo "✅ Git submodules initialized successfully"
+
 # Install system dependencies reminder
 echo ""
 echo "⚠️  IMPORTANT: Please ensure the following system dependencies are installed:"
