@@ -89,10 +89,6 @@ class VoiceExtractor:
             "--output-base-dir",
             str(self.dataset_dir),
         ]
-        
-        # Add token if available
-        if self.config.hf_token:
-            cmd.extend(["--token", self.config.hf_token])
             
         run_command(cmd, self.logger)
         
