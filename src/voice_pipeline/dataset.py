@@ -10,21 +10,21 @@ from .config import PipelineConfig
 
 
 class DatasetPreparer:
-    """Prepare and upload dataset to Hugging Face Hub."""
+    """Prepare dataset from voice clips and save locally."""
 
     def __init__(self, config: PipelineConfig, logger: logging.Logger):
         self.config = config
         self.logger = logger
 
-    def prepare_and_upload(self, dataset_dir: Path) -> str:
+    def prepare_and_save_local(self, dataset_dir: Path) -> str:
         """
-        Prepare dataset from extracted voice clips and upload to Hugging Face Hub.
+        Prepare dataset from extracted voice clips and save locally.
         
         Args:
             dataset_dir: Directory containing the extracted voice clips
             
         Returns:
-            The Hugging Face repository name
+            Path to the locally saved dataset
         """
         try:
             import pandas as pd
@@ -66,20 +66,20 @@ class DatasetPreparer:
 
         self.logger.info(f"Preparing dataset with {len(metadata)} samples")
 
-        # Create Hugging Face dataset
+        # Create Hugging Face dataset and save locally
         df = pd.DataFrame(metadata)
         dataset = Dataset.from_pandas(df)
         dataset = dataset.cast_column("audio", Audio(sampling_rate=self.config.tts_sample_rate))
 
-        # Upload to Hugging Face Hub
-        repo_name = self.config.hf_repo
-        self.logger.info(f"Uploading dataset to Hugging Face Hub: {repo_name}")
+        # Save dataset locally
+        local_dataset_path = self.config.out_dir / "hf_dataset"
+        self.logger.info(f"Saving dataset locally to: {local_dataset_path}")
         
         try:
-            dataset.push_to_hub(repo_name, token=self.config.hf_token)
-            self.logger.info("Dataset upload completed successfully")
+            dataset.save_to_disk(str(local_dataset_path))
+            self.logger.info("Dataset saved locally successfully")
         except Exception as e:
-            self.logger.error(f"Failed to upload dataset: {e}")
+            self.logger.error(f"Failed to save dataset locally: {e}")
             sys.exit(1)
 
-        return repo_name
+        return str(local_dataset_path)

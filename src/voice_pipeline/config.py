@@ -32,11 +32,10 @@ class PipelineConfig:
     audio_channels: int = int(os.getenv("AUDIO_CHANNELS", "2"))
     tts_sample_rate: int = int(os.getenv("TTS_SAMPLE_RATE", "24000"))
     
-    # Directories and repositories
+    # Directories
     out_dir: Path = field(
         default_factory=lambda: Path(os.getenv("DEFAULT_OUTPUT_DIR", "voice_clone"))
     )
-    hf_repo: str = os.getenv("DEFAULT_HF_REPO", "username/female_voice_ds")
     
     # Model configuration
     base_tts: str = os.getenv("DEFAULT_BASE_TTS_MODEL", "unsloth/sesame-csm-1b")
@@ -47,16 +46,8 @@ class PipelineConfig:
     gradient_accumulation_steps: int = int(os.getenv("DEFAULT_GRADIENT_ACCUMULATION", "8"))
     learning_rate: float = float(os.getenv("DEFAULT_LEARNING_RATE", "2e-4"))
     
-    # Authentication
-    hf_token: Optional[str] = os.getenv("HF_TOKEN")
-    
     def __post_init__(self):
         """Validate configuration after initialization."""
-        if not self.hf_token:
-            raise ValueError(
-                "HF_TOKEN is required. Please set it in your .env file or environment."
-            )
-        
         if not self.yt_url:
             raise ValueError("YouTube URL is required.")
         

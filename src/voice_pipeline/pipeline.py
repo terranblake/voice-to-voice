@@ -67,13 +67,13 @@ class VoiceCloningPipeline:
         self.logger.info("Step 2/5: Extracting target voice")
         clips_dir = self.extract_voice(source_wav)
 
-        # Step 3: Prepare and upload dataset
-        self.logger.info("Step 3/5: Preparing and uploading dataset")
-        hf_repo = self.prepare_dataset(clips_dir)
+        # Step 3: Prepare dataset locally
+        self.logger.info("Step 3/5: Preparing dataset locally")
+        dataset_path = self.prepare_dataset(clips_dir)
 
         # Step 4: Train TTS model
         self.logger.info("Step 4/5: Training TTS model")
-        lora_dir = self.train_model(hf_repo)
+        lora_dir = self.train_model(dataset_path)
 
         # Step 5: Generate demo
         self.logger.info("Step 5/5: Generating demo audio")
@@ -93,8 +93,8 @@ class VoiceCloningPipeline:
         return self.extractor.extract_voice(source_wav)
 
     def prepare_dataset(self, clips_dir: Path) -> str:
-        """Prepare dataset and upload to Hugging Face Hub."""
-        return self.dataset_preparer.prepare_and_upload(clips_dir)
+        """Prepare dataset locally."""
+        return self.dataset_preparer.prepare_and_save_local(clips_dir)
 
     def train_model(self, dataset_repo: str) -> Path:
         """Train the TTS model using LoRA fine-tuning."""

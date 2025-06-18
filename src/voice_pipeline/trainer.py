@@ -47,9 +47,10 @@ class TTSTrainer:
             self.logger.error(f"Failed to load base model: {e}")
             sys.exit(1)
 
-        self.logger.info(f"Loading dataset: {dataset_repo}")
+        self.logger.info(f"Loading dataset from local path: {dataset_repo}")
         
         try:
+            # Load dataset from local disk
             dataset = load_dataset(dataset_repo, split="train")
         except Exception as e:
             self.logger.error(f"Failed to load dataset: {e}")
